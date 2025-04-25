@@ -1,40 +1,35 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-name: Python application
+
+
+name: bd-sig-action
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main]
 
-permissions:
-  contents: read
-  security-events: write
-  actions: read
-
+env:
+  DETECT_PROJECT_NAME: Daniel-action-test
+  DETECT_PROJECT_VERSION_NAME: main
+  DETECT_POLICY_CHECK_FAIL_ON_SEVERITIES: ALL
+  LOGGING_LEVEL_COM_SYNOPSYS_INTEGRATION: DEBUG
+  DETECT_TOOLS: DETECTOR
+  DETECT_TIMEOUT: 3000
 jobs:
   build:
-      runs-on: [ ubuntu-latest ]
-      steps:
-        - name: Checkout Source
-          uses: actions/checkout@v4
-        - name: Blackduck Scan
-  # You may pin to the exact commit or the version.
-  
- 
-          uses: blackduck-inc/black-duck-security-scan@v2.1.1
-          ### Use below configuration to set specific detect environment variables
-          env:
-           DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
-          with:
-            blackducksca_url: ${{ secrets.BLACKDUCK_URL }}
-            # API token to access blackduck
-            blackducksca_token: ${{ secrets.BLACKDUCK_API_TOKEN }}
-            # Directory to find or install detect
-            #detect_install_directory: # optional
-            # Scan Mode. (true for intelligent scan & false for rapid scan)
-            blackducksca_scan_full: true
-            mark_build_status: success
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
 
-            
+      - name: Black Duck PR Scan
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.6.0
+        ### Use below configuration to set specific detect environment variables
+        env:
+          DETECT_EXCLUDED_DETECTOR_TYPES: GIT
+        with:
+          include_diagnostics: true
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN }}
+          blackduck_scan_full: false
+          blackduck_prComment_enabled: true
+          mark_build_status: success
