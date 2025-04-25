@@ -30,7 +30,7 @@ jobs:
           with:
             blackducksca_url: ${{ secrets.BLACKDUCK_URL }}
             # API token to access blackduck
-            blackducksca_token: ${{ secrets.BLACKDUCK_TOKEN }}
+            blackducksca_token: ${{ secrets.BLACKDUCK_API_TOKEN }}
             # Directory to find or install detect
             #detect_install_directory: # optional
             # Scan Mode. (true for intelligent scan & false for rapid scan)
