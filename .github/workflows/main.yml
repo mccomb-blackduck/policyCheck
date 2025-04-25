@@ -28,6 +28,6 @@ jobs:
         with:
           include_diagnostics: true
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_token: ${{ secrets.BLACKDUCK_TOKEN }}
+          blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_scan_full: false
           blackduck_prComment_enabled: true
