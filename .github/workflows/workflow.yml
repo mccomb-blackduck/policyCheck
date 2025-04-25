@@ -35,4 +35,6 @@ jobs:
             #detect_install_directory: # optional
             # Scan Mode. (true for intelligent scan & false for rapid scan)
             blackducksca_scan_full: true
+            mark_build_status: success
+
             
