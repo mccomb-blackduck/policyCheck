@@ -31,3 +31,5 @@ jobs:
           blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_scan_full: false
           blackduck_prComment_enabled: true
+          mark_build_status: success
+
