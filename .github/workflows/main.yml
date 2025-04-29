@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout Source
       uses: actions/checkout@v4
+    - name: Get event_name
+      run: echo event type ${{github.event_name}}
     - name: Setup Java JDK
       uses: actions/setup-java@v4
       with:
@@ -21,6 +23,8 @@ jobs:
     - name: Maven Build
       run: mvn -B -DskipTests package
     - name: Black Duck SCA Scan
+      id: black-duck-full-scan
+      if: ${{ github.event_name != 'pull_request' }}
       uses: blackduck-inc/black-duck-security-scan@v2.1.1
       env:
         DETECT_PROJECT_NAME: daniel-action-test
@@ -30,8 +34,31 @@ jobs:
       with:
         blackducksca_url: ${{ secrets.BLACKDUCKSCA_URL }}
         blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
-        blackducksca_scan_failure_severities: 'BLOCKER'
+        blackducksca_scan_failure_severities: CRITICAL
         blackducksca_prComment_enabled: true
         blackducksca_fixpr_enabled: true
         mark_build_status: success
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        blackducksca_scan_full: true
+        detect_search_depth: 10
+
+    - name: Black Duck SCA PR Scan
+      id: black-duck-pr-scan
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: blackduck-inc/black-duck-security-scan@v2.1.1
+      env:
+        DETECT_PROJECT_NAME: daniel-action-test
+        DETECT_PROJECT_VERSION_NAME: main
+        DETECT_EXCLUDED_DETECTOR_TYPES: GIT
+        BLACKDUCK_TRUST_CERT: true
+      with:
+        blackducksca_url: ${{ secrets.BLACKDUCKSCA_URL }}
+        blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
+        blackducksca_scan_full: false
+        blackducksca_fixpr_enabled: true
+        blackducksca_fixpr_filter_severities: CRITICAL
+        blackducksca_prComment_enabled: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        detect_search_depth: 10
+        detect_args: '--detect.blackduck.rapid.compare.mode=ALL'
+
