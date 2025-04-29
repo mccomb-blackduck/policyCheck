@@ -1,18 +1,10 @@
 version: rapid2
 policy:
   overrides:
-  - policyName: Critical Severity Security Policy Rule
+  - policyName: Daniel_Github_Actions
     components:
-    - name: i18next 
-      version: 1.10.1
-  - policyName: ENT_IT_NON_FOSS_license
-    components:
-    - name: IBM Data Server Driver for JDBC and SQLJ 
+    - name: jackson-databind
+      version: 2.6.0
       version: 11.5.9.0
-    - policyName: High Severity Security Policy Rule
-       components:
-     - name: i18next 
-       version: 1.10.1
-     - name: jQuery  
-       version: 1.6.2
+
  
