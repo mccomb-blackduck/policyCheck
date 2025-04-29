@@ -26,6 +26,7 @@ jobs:
         DETECT_PROJECT_NAME: daniel-action-test
         DETECT_PROJECT_VERSION_NAME: main
         DETECT_EXCLUDED_DETECTOR_TYPES: GIT
+        BLACKDUCK_TRUST_CERT: true
       with:
         blackducksca_url: ${{ secrets.BLACKDUCKSCA_URL }}
         blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
