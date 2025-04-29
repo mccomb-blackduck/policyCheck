@@ -25,7 +25,7 @@ jobs:
       env:
         DETECT_PROJECT_NAME: daniel-action-test
         DETECT_PROJECT_VERSION_NAME: main
-        DETECT_EXCLUDED_DETECTORS_TYPES: git
+        DETECT_EXCLUDED_DETECTOR_TYPES: GIT
       with:
         blackducksca_url: ${{ secrets.BLACKDUCKSCA_URL }}
         blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
