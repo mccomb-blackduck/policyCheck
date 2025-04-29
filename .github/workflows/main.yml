@@ -34,7 +34,7 @@ jobs:
       with:
         blackducksca_url: ${{ secrets.BLACKDUCKSCA_URL }}
         blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
-        blackducksca_scan_failure_severities: CRITICAL
+        blackducksca_scan_failure_severities: CRITICAL,HIGH
         blackducksca_prComment_enabled: true
         blackducksca_fixpr_enabled: true
         mark_build_status: success
