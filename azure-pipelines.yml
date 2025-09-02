@@ -1,0 +1,33 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Maven@3
+  displayName: 'Build with Maven'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+
+- script: |
+    echo "Running Black Duck Detect..."
+    curl -s -L https://detect.synopsys.com/detect.sh | bash -s -- --detect.version=${DETECT_LATEST_RELEASE_VERSION} \
+      --blackduck.url=${BLACKDUCK_URL} \
+      --blackduck.api.token=${BLACKDUCK_API_TOKEN} \
+      --detect.project.name=my-maven-app \
+      --detect.project.version.name=$(Build.BuildId) \
+      --detect.code.location.name=my-maven-app-code \
+      --detect.policy.check=true
+  displayName: 'Run Black Duck Detect Scan'
+  env:
+    BLACKDUCK_URL: $(BLACKDUCK_URL)
+    BLACKDUCK_API_TOKEN: $(BLACKDUCK_API_TOKEN)
+    DETECT_VERSION: $(DETECT_LATEST_RELEASE_VERSION)
